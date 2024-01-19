@@ -23,7 +23,7 @@ class AMTModel(cog.BasePredictor):
         video: Path,  # Input video file
         model_type: str = "amt-l",  # Model type, default "amt-l"
         recursive_interpolation_passes: int = 1,  # Number of recursive interpolation passes
-        output_video_fps: int = 25  # Output video FPS
+        output_video_fps: int = 16  # Output video FPS
     ) -> Path:
         with TemporaryDirectory() as tmpdir:
             inputs_dir = os.path.join(tmpdir, "frames")
