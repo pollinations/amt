@@ -36,7 +36,7 @@ class AMTModel(cog.BasePredictor):
             # Run the AMT interpolation model
             model_type_upper = model_type.upper()
             # change directory to AMT
-            os.chdir('AMT')
+            os.chdir('/src/AMT')
             os.system(f'python demos/demo_2x.py --config cfgs/{model_type_upper}.yaml --ckpt ../pretrained/{model_type}.pth --niters {recursive_interpolation_passes} --input {inputs_dir} --out_path {outputs_dir} --frame_rate {output_video_fps}')
 
             # Return the output video
