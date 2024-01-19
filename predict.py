@@ -41,9 +41,14 @@ class AMTModel(cog.BasePredictor):
 
             # Return the output video
             output_video = os.path.join(outputs_dir, "demo_0000.mp4")
-            # shutil.copy(output_video, '/tmp')  # Copy to a non-temporary location
+
+            # create a unique filename mp4 in /tmp
+            import uuid
+            out_file_1 = f'/tmp/{uuid.uuid4()}.mp4'
+            out_file_2 = f'/tmp/{uuid.uuid4()}.mp4'
+            shutil.copy(output_video, out_file_1)  # Copy to a non-temporary location
             
             # convert video to an mp4 format that web browsers can play
-            os.system(f'ffmpeg -i {output_video} -vcodec libx264 {outputs_dir}/demo_browser.mp4')
+            os.system(f'ffmpeg -i {out_file_1} -vcodec libx264 {out_file_2}')
             
-            return Path(f'{outputs_dir}/demo_browser.mp4')
+            return Path(out_file_2)
