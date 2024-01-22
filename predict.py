@@ -23,7 +23,7 @@ class AMTModel(cog.BasePredictor):
         video: Path,  # Input video file
         model_type: str = "amt-l",  # Model type, default "amt-l"
         recursive_interpolation_passes: int = 2,  # Number of recursive interpolation passes
-        output_video_fps: int = 32 # Output video FPS
+        output_video_fps: int = 16, # Output video FPS,
     ) -> Path:
         with TemporaryDirectory() as tmpdir:
             inputs_dir = os.path.join(tmpdir, "frames")
@@ -31,7 +31,8 @@ class AMTModel(cog.BasePredictor):
             os.makedirs(inputs_dir, exist_ok=True)
 
             # Extract frames from the video
-            os.system(f'ffmpeg -i {video} {inputs_dir}/frame%04d.png')
+            fps_filter = " -vf mpdecimate,setpts=N/FRAME_RATE/TB"
+            os.system(f'ffmpeg -i "{video}" {fps_filter} {inputs_dir}/frame%04d.png')
 
             # Run the AMT interpolation model
             model_type_upper = model_type.upper()
@@ -49,6 +50,6 @@ class AMTModel(cog.BasePredictor):
             shutil.copy(output_video, out_file_1)  # Copy to a non-temporary location
             
             # convert video to an mp4 format that web browsers can play
-            os.system(f'ffmpeg -i {out_file_1} -vcodec libx264 {out_file_2}')
+            os.system(f'ffmpeg -i "{out_file_1}" -vcodec libx264 "{out_file_2}"')
             
             return Path(out_file_2)
